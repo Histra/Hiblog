@@ -1,0 +1,6 @@
+# Flask stuff:
+instance/
+
+# Environments
+.env
+.venv

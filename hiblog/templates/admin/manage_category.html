@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% from 'bootstrap/pagination.html' import render_pagination %}
+
+{% block title %} Manage Categories {% endblock title %}
+
+{% block content %}
+    <div class="page-header">
+        <h1>
+            Categories
+            <small class="text-muted">{{ pagination.total }}</small>
+            <span class="float-right">
+                <a class="btn btn-primary btn-sm" href="{{ url_for('.new_category') }}">
+                    New Category
+                </a>
+            </span>
+        </h1>
+    </div>
+    {% if categories %}
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th><a href="{{ url_for('.manage_category', order_by='id') }}">No</a></th>
+                    <th><a href="{{ url_for('.manage_category', order_by='name') }}">Name</a></th>
+                    <th>Posts</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            {% for category in categories %}
+                <tr>
+                    <td>
+                        {{ loop.index + ((pagination.page - 1) * config.HIBLOG_MANAGE_CATEGORY_PER_PAGE) }}
+                    </td>
+                    <td>
+                        <a href="{{ url_for('blog.show_category', category_id=category.id) }}">{{ category.name }}</a>
+                    </td>
+                    <td>
+                        {{ category.posts|length }}
+                    </td>
+                    <td>
+                        {% if category.id != 1 %}
+                            <a class="btn btn-info btn-sm" href="{{ url_for('.edit_category', category_id=category.id) }}">Edit</a>
+                            <form class="form-inline" method="post" action="{{ url_for('.delete_category', category_id=category.id, next=request.full_path) }}">
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure to delete?');">
+                                    Delete
+                                </button>
+                            </form>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+        <div class="page-footer">{{ render_pagination(pagination) }}</div>
+    {% else %}
+        <div class="tooltip"><h5>No Post Yet.</h5></div>
+    {% endif %}
+
+{% endblock content %}

@@ -1,0 +1,2 @@
+FLASK_APP=hiblog
+FLASK_ENV=development
