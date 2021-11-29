@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+{% from 'bootstrap/pagination.html' import render_pagination %}
+
+{% block title %} Manage Posts {% endblock title %}
+
+{% block content %}
+    <div class="page-header">
+        <h1>
+            Answer
+            <small class="text-muted">{{ pagination.total }}</small>
+            <span class="float-right">
+                <a class="btn btn-primary btn-sm" href="{{ url_for('answer.new_answer') }}">
+                    New Answer
+                </a>
+            </span>
+        </h1>
+    </div>
+    {% if answers %}
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>No.</th>
+                    <th>Id</th>
+                    <th>Title</th>
+                    <th>Content</th>
+                    <th>Author</th>
+                    <th>Display Times</th>
+                    <th>Links</th>
+                    <th>Status</th>
+                    <th>TimeStamp</th>
+                    <th>Note</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            {% for answer in answers %}
+                <tr>
+                    <td>
+                        {{ loop.index + ((pagination.page - 1) * config.HIBLOG_MANAGE_POST_PER_PAGE) }}
+                    </td>
+                    <td>
+                        <a href="{{ url_for('answer.show_answer', answer_id=answer.id) }}">{{ answer.id }}</a>
+                    </td>
+                    <td>
+                        {{ answer.title }}
+                    </td>
+                    <td>
+                        <a href="{{ url_for('answer.show_answer', answer_id=answer.id) }}">
+                            {{ answer.content|truncate(10, True) }}
+                        </a>
+                    </td>
+                    <td>
+                        {{ answer.author }}
+                    </td>
+                    <td>
+                        {{ answer.display_times }}
+                    </td>
+                    <td>
+                        {% if answer.links %}
+                            {% for item in answer.links | string2list_dict %}
+                                <a href="{{ item.url }}">{{ item.title }}</a>
+                            {% endfor %}
+                        {% endif %}
+                    </td>
+                    <td>
+                        {{ answer.status }}
+                    </td>
+                    <td>
+                        {{ moment(answer.timestamp).format('LL') }}
+                    </td>
+                    <td>
+                        {{ answer.note }}
+                    </td>
+                    <td>
+                        <a class="btn btn-info btn-sm" href="{{ url_for('answer.edit_answer', answer_id=answer.id) }}">Edit</a>
+{#                        <form class="form-inline" method="post" action="#">#}
+{#                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">#}
+{#                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure to delete?');">#}
+{#                                Delete#}
+{#                            </button>#}
+{#                        </form>#}
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+        <div class="page-footer">{{ render_pagination(pagination) }}</div>
+    {% else %}
+        <div class="tooltip"><h5>No Answers Yet.</h5></div>
+    {% endif %}
+
+{% endblock content %}

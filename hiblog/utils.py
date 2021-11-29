@@ -3,6 +3,7 @@
 # @Author : Histranger
 # @File : utils.py
 # @Software: PyCharm
+from wtforms import ValidationError
 
 try:
     from urlparse import urlparse, urljoin
@@ -25,3 +26,25 @@ def redirect_back(default='blog.index', **kwargs):
         if is_safe_url(target):
             return redirect(target)
     return redirect(url_for(default, **kwargs))
+
+
+def is_dict(message=None):
+    if message is None:
+        message = "Must be Python Dict."
+
+    def _is_dict(form, field):
+        nonlocal message
+        if field.data:
+            try:
+                dict_type = eval(field.data)
+            except Exception as e:
+                message = message + f" | {str(e)}"
+                raise ValidationError(message)
+            else:
+                if not isinstance(dict_type, dict):
+                    raise ValidationError(message)
+
+    return _is_dict
+
+
+

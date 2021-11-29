@@ -17,6 +17,7 @@ flask-ckeditor = "*"
 flask-login = "*"
 flask-markdown = "*"
 markdown = "*"
+flask-cors = "*"
 
 [dev-packages]
 flask-sqlacodegen = "*"

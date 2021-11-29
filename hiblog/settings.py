@@ -32,6 +32,9 @@ class BaseConfig(object):
                       'morph': 'morph_bootstrap.min.css',
                       'cyborg': 'cyborg_bootstrap.min.css'}
 
+    HIBLOG_ANSWER_MANAGE_PER_PAGE = 10
+    HIBLOG_ANSWER_API_V1_PER_PAGE = 5
+
 
 class DevelopmentConfig(BaseConfig):
     SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://{}:{}@{}/{}'. \

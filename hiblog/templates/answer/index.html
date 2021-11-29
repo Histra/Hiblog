@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block title %}Answer{% endblock %}
+
+{% block content %}
+    {% for i in range(8) %}<br>{% endfor %}
+    <div class="page-header">
+        {% if answer.title %}
+            <strong class="h3">{{ answer.title }}</strong>
+        {% endif %}
+    </div>
+    {% for i in range(2) %}<br>{% endfor %}
+    <div class="row">
+        <div class="col-12">
+            <p class="h1">
+                 {{ answer.content }}
+            </p>
+            <p class="float-right h4">
+                {% if answer.author %}
+                {% for i in range(3) %}-{% endfor %}
+                {{ answer.author }}
+                {% endif %}
+            </p>
+        </div>
+    </div>
+    {% for i in range(8) %}<br>{% endfor %}
+{% endblock %}
+
+{% block scripts %}
+    {{ super() }}
+    <script>
+        document.ondblclick = function (){
+            location.reload();
+        }
+    </script>
+{% endblock scripts %}

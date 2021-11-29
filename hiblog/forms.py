@@ -9,6 +9,7 @@ from wtforms import StringField, PasswordField, BooleanField, SubmitField, Selec
 from wtforms.validators import DataRequired, Length, ValidationError, Email, Optional, URL
 
 from hiblog.models import Category
+from hiblog.utils import is_dict
 
 
 class LoginForm(FlaskForm):
@@ -69,3 +70,13 @@ class MarkdownPostForm(PostForm):
         self.category.choices = [(category.id, category.name) for category in
                                  Category.query.order_by(Category.name).all()]
 
+
+class AnswerForm(FlaskForm):
+    title = StringField('Title', validators=[Length(0, 200)])
+    # content = TextAreaField('Content', validators=[DataRequired()])  # ckeditor5
+    # content = CKEditorField('Content', validators=[DataRequired()])
+    content = TextAreaField('Content', validators=[DataRequired()])
+    author = StringField('Author', validators=[Length(0, 200)])
+    links = StringField('Links', validators=[is_dict()])
+    note = StringField("Note")
+    submit = SubmitField()

@@ -3,14 +3,19 @@
 # @Author : Histranger
 # @File : fakes.py
 # @Software: PyCharm
+import os
 import random
 
+from dotenv import load_dotenv
 from faker import Faker
 
 from hiblog.extentions import db
 from hiblog.models import Admin, Category, Post, Comment
 
 faker = Faker()
+
+TOP_PATH = os.path.abspath(os.path.dirname(__file__))
+load_dotenv(os.path.join(TOP_PATH, '.env'))
 
 
 def fake_admin():
@@ -21,7 +26,7 @@ def fake_admin():
         name="Histranger",
         about="A man who likes Haocun Liu."
     )
-    admin.set_password("admin12345")
+    admin.set_password(os.getenv('ADMIN_PASSWORD'))
 
     db.session.add(admin)
     db.session.commit()

@@ -11,6 +11,8 @@ from flask_login import current_user
 from flask_wtf.csrf import CSRFError
 from markdown import Markdown
 
+from hiblog.apis.v1 import api_v1
+from hiblog.blueprints.answer import answer_bp
 from hiblog.blueprints.admin import admin_bp
 from hiblog.blueprints.auth import auth_bp
 from hiblog.blueprints.blog import blog_bp
@@ -26,14 +28,23 @@ def create_app(config_name=None):
     app = Flask('hiblog')
     app.config.from_object(config[config_name])
 
+    register_jinja2_filters(app)
+
     register_extensions(app)  # register extensions
     register_blueprints(app)  # register blueprints
     register_shell_context(app)  # register shell context
     register_commands(app)  # register flask commands
     register_template_context(app)  # register flask template context
-    register_errors(app)    # register errors
+    register_errors(app)  # register errors
 
     return app
+
+
+def register_jinja2_filters(app):
+    @app.template_filter()
+    def string2list_dict(string):
+        list_dict = [{'title': title, 'url': url} for title, url in eval(string).items()]
+        return list_dict
 
 
 def register_extensions(app):
@@ -42,6 +53,7 @@ def register_extensions(app):
     bootstrap.init_app(app)
     login_manager.init_app(app)
     csrf.init_app(app)
+    csrf.exempt(api_v1)
     ckeditor.init_app(app)
     from flaskext.markdown import Markdown
     markdown = Markdown(app)
@@ -51,6 +63,8 @@ def register_blueprints(app):
     app.register_blueprint(blog_bp)
     app.register_blueprint(admin_bp, url_prefix="/admin")
     app.register_blueprint(auth_bp, url_prefix="/auth")
+    app.register_blueprint(answer_bp, url_prefix="/answer")
+    app.register_blueprint(api_v1, url_prefix="/answer/api/v1")
 
 
 def register_shell_context(app):
@@ -97,7 +111,8 @@ def register_commands(app):
 
     @app.cli.command()
     @click.option('--username', prompt=True, help="The username used to login.")
-    @click.option('--password', prompt=True, help="The password used to login.", hide_input=True, confirmation_prompt=True)
+    @click.option('--password', prompt=True, help="The password used to login.", hide_input=True,
+                  confirmation_prompt=True)
     def init(username, password):
         """Create HiBlog just for you."""
         click.echo("Initializing the HiBlog.")

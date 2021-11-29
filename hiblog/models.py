@@ -88,3 +88,17 @@ class Comment(db.Model):
     replied = db.relationship('Comment', back_populates='replies', remote_side=[id])
 
     replies = db.relationship('Comment', back_populates='replied', cascade='all, delete-orphan')
+
+
+class Answer(db.Model):
+    __tablename__ = 'answer'
+
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(200))
+    content = db.Column(db.String)
+    author = db.Column(db.String(200))
+    display_times = db.Column(db.Integer, server_default=db.FetchedValue())
+    links = db.Column(db.String)
+    status = db.Column(db.Integer, server_default=db.FetchedValue())
+    timestamp = db.Column(db.DateTime, nullable=False, server_default=db.FetchedValue())
+    note = db.Column(db.Text)
