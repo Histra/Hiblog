@@ -4,8 +4,8 @@
 
 {% block head %}
     {{ super() }}
-{#    <link rel="stylesheet" href="{{ url_for('static', filename="editormd/css/editormd.css") }}"/>#}
-    <link rel="stylesheet" href={{ url_for('static', filename="editormd/css/editormd.preview.css") }} />
+    {#    <link rel="stylesheet" href="{{ url_for('static', filename="editormd/css/editormd.css") }}"/>#}
+    <link rel="stylesheet" href={{ url_for('static', filename="editormd/css/editormd.preview.css") }}/>
 
 {% endblock head %}
 
@@ -28,7 +28,7 @@
     <div class="row">
         <div class="col-sm-8">
             {% if post.type == 'markdown' %}
-{#                {{ post.body|markdown|safe }}#}
+                {#                {{ post.body|markdown|safe }}#}
                 <div id="editor-md">
                     <textarea style="display:none;">{{ post.body }}</textarea>
                 </div>
@@ -134,7 +134,38 @@
             {% endif %}
             {% if post.can_comment %}
                 <div id="comment-form">
-                    {{ render_form(form, action=request.full_path) }}
+{#                    {{ render_form(form, action=request.full_path) }}#}
+                    <form method="post" action="{{ request.full_path }}" class="form" role="form">
+                        {{ form.csrf_token }}
+                        <div class="form-group">
+                            {{ form.author.label }}
+                            {{ form.author(class='form-control') }}
+                        </div>
+                        <div class="form-group">
+                            {{ form.email.label }}
+                            {{ form.email(class='form-control') }}
+                        </div>
+                        <div class="form-group">
+                            {{ form.site.label }}
+                            {{ form.site(class='form-control') }}
+                        </div>
+                        <div class="form-group">
+                            {{ form.body.label }}
+                            {{ form.body(class='form-control') }}
+                        </div>
+                        <div class="form-group">
+                            {{ form.captcha_code.label }}
+                            <div class="row form-group">
+                                <div class="col-9 form-group">
+                                    {{ form.captcha_code(class="form-control") }}
+                                </div>
+                                <div class="col-3 form-group">
+                                    <img id="captcha_pic" onclick="javascript:fresh_vc()" alt="Please refresh to get verification code." src="{{ url_for('auth.captcha') }}">
+                                </div>
+                            </div>
+                        </div>
+                        {{ form.submit(class="btn btn-primary btn-md") }}
+                    </form>
                 </div>
             {% else %}
                 <div class="list-group-item"><h5>Comment disabled.</h5></div>
@@ -164,9 +195,18 @@
             var editor = editormd.markdownToHTML("editor-md", {
                 htmlDebode: true,
                 tex: true,               // 默认不解析
-                flowChart:true,         // 默认不解析
-                sequenceDiagram:true
+                flowChart: true,         // 默认不解析
+                sequenceDiagram: true
             });
         });
+    </script>
+
+    <script>
+        function fresh_vc() {
+            $.get("{{ url_for('auth.captcha', type='base64') }}", function (data) {
+                {#console.log(data);#}
+                $('#captcha_pic').attr('src', data["base64"]);
+            }, dataType='json')
+        }
     </script>
 {% endblock scripts %}

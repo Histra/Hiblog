@@ -5,14 +5,14 @@
 # @Software: PyCharm
 import os
 
-# https://2dogz.cn/blog/article/4/
-from dotenv import load_dotenv
-load_dotenv('.env')
-
 MYSQL_USERNAME = os.getenv('MYSQL_USERNAME', 'hiblog')
 MYSQL_PASSWORD = os.getenv('MYSQL_PASSWORD', 'You guess.')
 MYSQL_HOST = os.getenv('MYSQL_HOST', 'You guess.')
 MYSQL_DATABASE_NAME = os.getenv('MYSQL_DATABASE_NAME', 'hiblog')
+
+
+class StaticConfig(object):
+    hiblog_PATH = os.path.abspath(os.path.dirname(__file__))
 
 
 class BaseConfig(object):
@@ -29,11 +29,14 @@ class BaseConfig(object):
     HIBLOG_EMAIL = "1497058369@qq.com"
 
     HIBLOG_THEMES = {'default': 'bootstrap.min.css',
-                      'morph': 'morph_bootstrap.min.css',
-                      'cyborg': 'cyborg_bootstrap.min.css'}
+                     'morph': 'morph_bootstrap.min.css',
+                     'cyborg': 'cyborg_bootstrap.min.css'}
 
     HIBLOG_ANSWER_MANAGE_PER_PAGE = 10
     HIBLOG_ANSWER_API_V1_PER_PAGE = 5
+
+    # TOP_PATH = os.path.abspath(os.path.dirname(__file__))
+    # load_dotenv(os.path.join(TOP_PATH, '.env'))
 
 
 class DevelopmentConfig(BaseConfig):
@@ -50,3 +53,7 @@ config = {
     'development': DevelopmentConfig,
     'production': ProductionConfig
 }
+
+if __name__ == '__main__':
+    TOP_PATH = os.path.abspath(os.path.dirname(__file__))
+    print(TOP_PATH)

@@ -6,17 +6,12 @@
 import os
 import random
 
-from dotenv import load_dotenv
 from faker import Faker
 
 from hiblog.extentions import db
 from hiblog.models import Admin, Category, Post, Comment
 
 faker = Faker()
-
-TOP_PATH = os.path.abspath(os.path.dirname(__file__))
-load_dotenv(os.path.join(TOP_PATH, '.env'))
-
 
 def fake_admin():
     admin = Admin(

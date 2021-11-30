@@ -5,7 +5,8 @@
 # @Software: PyCharm
 import collections
 
-from flask import Blueprint, render_template, url_for, request, current_app, flash, redirect, abort, make_response
+from flask import Blueprint, render_template, url_for, request, current_app, flash, redirect, abort, make_response, \
+    session
 from flask_login import current_user
 
 from hiblog.extentions import db
@@ -50,26 +51,46 @@ def show_post(post_id):
     replied_id = request.args.get('reply')
     if replied_id:
         reply_comment = Comment.query.get_or_404(replied_id)
+    #
+    if session.get("comment_author"):
+        form.author.data = session.get("comment_author")
+    if session.get("comment_email"):
+        form.email.data = session.get("comment_email")
+    if session.get("comment_site"):
+        form.site.data = session.get("comment_site")
+    if session.get("comment_body"):
+        form.body.data = session.get("comment_body")
+
     if form.validate_on_submit():
         author = form.author.data
         email = form.email.data
-        site = form.email.data
+        site = form.site.data
         body = form.body.data
-        comment = Comment(
-            author=author, email=email, site=site, body=body,
-            from_admin=from_admin, post=post, reviewed=reviewed
-        )
-        if replied_id:
-            comment.replied = reply_comment
-            # sendMessage2TheUser
-        db.session.add(comment)
-        db.session.commit()
+        session["comment_author"] = author
+        session["comment_email"] = email
+        session["comment_site"] = site
+        session["comment_body"] = body
+        captcha_code = session.get("captcha_code")
+        if captcha_code == form.captcha_code.data.lower():
+            comment = Comment(
+                author=author, email=email, site=site, body=body,
+                from_admin=from_admin, post=post, reviewed=reviewed
+            )
+            if replied_id:
+                comment.replied = reply_comment
+                # sendMessage2TheUser
+            db.session.add(comment)
+            db.session.commit()
 
-        if current_user.is_authenticated:
-            flash('Comment published.', 'success')
+            if current_user.is_authenticated:
+                flash('Comment published.', 'success')
+            else:
+                flash('Thanks, your comment will be published after reviewed.', 'info')
+                for item in ["comment_author", "comment_email", "comment_site", "comment_body"]:
+                    session.pop(item)
+                # sendMessage2Histranger
         else:
-            flash('Thanks, your comment will be published after reviewed.', 'info')
-            # sendMessage2Histranger
+            flash('Verification Code Error.', 'warning')
         return redirect(url_for('.show_post', post_id=post_id))
 
     return render_template('blog/post.html', post=post, pagination=pagination, comments=comments, form=form,

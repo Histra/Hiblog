@@ -21,6 +21,11 @@ from hiblog.models import ForTest, Admin, Category, Post, Comment
 from hiblog.settings import config
 
 
+# https://2dogz.cn/blog/article/4/
+from dotenv import load_dotenv
+load_dotenv('.env')
+
+
 def create_app(config_name=None):
     if config_name is None:
         config_name = os.getenv('FLASK_CONFIG', 'development')

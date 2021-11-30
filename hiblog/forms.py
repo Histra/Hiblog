@@ -15,6 +15,7 @@ from hiblog.utils import is_dict
 class LoginForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired(), Length(1, 20)])
     password = PasswordField('Password', validators=[DataRequired(), Length(8, 128)])
+    captcha_code = StringField('Verification Code', validators=[DataRequired(), Length(4, 4, message="Input verification code.")])
     remember = BooleanField('Remember me')
     submit = SubmitField('Log in')
 
@@ -45,6 +46,13 @@ class CommentForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired(), Email(), Length(1, 254)])
     site = StringField('Site', validators=[Optional(), URL(), Length(0, 255)])
     body = TextAreaField('Comment', validators=[DataRequired()])
+    # css_dict = {
+    #     'class': 'col-8 form-group',
+    # }
+    # captcha_code = StringField('Verification Code', validators=[DataRequired(), Length(4, 4, message="Input verification code.")],
+    #                            render_kw=css_dict)
+    captcha_code = StringField('Verification Code',
+                               validators=[DataRequired(), Length(4, 4, message="Input verification code.")])
     submit = SubmitField()
 
 

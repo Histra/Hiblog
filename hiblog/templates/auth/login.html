@@ -8,10 +8,54 @@
         <div class="row h-100 page-header justify-content-center align-items-center">
             <h1>Log in</h1>
         </div>
+        {#        <div class="row h-100 justify-content-center align-items-center">#}
+        {#            {{ render_form(form, extra_classes='col-6') }}#}
+        {#        </div>#}
         <div class="row h-100 justify-content-center align-items-center">
-            {{ render_form(form, extra_classes='col-6') }}
+            <form method="post" action="{{ url_for('auth.login') }}" class="form col-6" role="form" >
+                {{ form.csrf_token }}
+                <div class="form-group">
+                    {{ form.username.label }}
+                    {{ form.username(class='form-control') }}
+                </div>
+                <div class="form-group">
+                    {{ form.password.label }}
+                    {{ form.password(class='form-control') }}
+                </div>
+                <div class="form-group">
+                    {{ form.captcha_code.label }}
+                    <div class="row form-group">
+                        <div class="col-8 form-group">
+                            {{ form.captcha_code(class="form-control") }}
+                        </div>
+                        <div class="col-4 form-group">
+                            <img id="captcha_pic" onclick="javascript:fresh_vc()" alt="Please refresh to get verification code." src="{{ url_for('auth.captcha') }}">
+                        </div>
+                    </div>
+                    {#                    {{ form.captcha_code(class="form-control") }}#}
+                </div>
+                <div class="form-check">
+                    {{ form.remember(class="form-check-input") }}
+                    {{ form.remember.label }}
+                </div>
+                {{ form.submit(class="btn btn-primary btn-md") }}
+            </form>
         </div>
+
     </div>
 {% endblock %}
 
 {% block footer %}{% endblock %}
+
+{% block scripts %}
+    {{ super() }}
+    <script>
+        function fresh_vc() {
+            $.get("{{ url_for('auth.captcha', type='base64') }}", function (data) {
+                {#console.log(data);#}
+                $('#captcha_pic').attr('src', data["base64"]);
+            }, dataType='json')
+        }
+    </script>
+{% endblock scripts %}
+
