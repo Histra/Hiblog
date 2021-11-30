@@ -9,12 +9,12 @@ from flask import url_for
 def answer_item_schema(answer_item):
     return {
         'id': answer_item.id,
-        'self': url_for('.answer_item', _external=True),
+        'self': url_for('.answer_item', answer_id=answer_item.id, _external=True),
         'kind': 'Answer Item',
         'title': answer_item.title,
         'content': answer_item.content,
         'author': answer_item.author,
-        'link': [{'title': title, 'url': url} for title, url in answer_item.link.items()],
+        'link': [{'title': title, 'url': url} for title, url in eval(answer_item.links).items()] if answer_item.links else [],
         'status': answer_item.status
     }
 

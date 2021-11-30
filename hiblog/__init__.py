@@ -6,7 +6,7 @@
 import os
 
 import click
-from flask import Flask, render_template
+from flask import Flask, render_template, request, jsonify
 from flask_login import current_user
 from flask_wtf.csrf import CSRFError
 from markdown import Markdown
@@ -161,8 +161,36 @@ def register_template_context(app):
 def register_errors(app):
     @app.errorhandler(404)
     def errors_404(e):
+        if request.accept_mimetypes.accept_json and not request.accept_mimetypes.accept_html or request.path.startswith(
+                '/api'):
+            response = jsonify(code=404, message="You were LOST.")
+            response.status_code = 404
+            return response
         return render_template('errors/404.html'), 404
+
+    @app.errorhandler(500)
+    def errors_500(e):
+        if request.accept_mimetypes.accept_json and not request.accept_mimetypes.accept_html or request.path.startswith(
+                '/api'):
+            response = jsonify(code=500, message="An internal server error occurred.")
+            response.status_code = 500
+            return response
+        return render_template('errors/500.html'), 500
+
+    @app.errorhandler(405)
+    def errors_405(e):
+        """method not allowed"""
+        response = jsonify(code=405, message="The method is not allowed for the requested URL.")
+        response.status_code = 405
+        return response
+
+    @app.errorhandler(503)
+    def errors_503(e):
+        """method not allowed"""
+        response = jsonify(code=503, message="Service Unavailable.")
+        response.status_code = 503
+        return response
 
     @app.errorhandler(CSRFError)
     def handle_csrf_error(e):
-        return render_template('errors/404.html', description=e.description), 400
+        return render_template('errors/400.html', description=e.description), 400

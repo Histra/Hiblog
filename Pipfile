@@ -22,6 +22,7 @@ flask-cors = "*"
 [dev-packages]
 flask-sqlacodegen = "*"
 faker = "*"
+httpie = "*"
 
 [requires]
 python_version = "3.8"

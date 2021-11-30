@@ -40,7 +40,6 @@ def manage_answer():
 def new_answer():
     form = AnswerForm()
     if form.validate_on_submit():
-        print("fds")
         title = form.title.data
         content = form.content.data
         author = form.author.data

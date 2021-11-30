@@ -30,7 +30,7 @@ def get_token():
 
 
 def validate_token(token):
-    s = Serializer(current_app["SECRET_KEY"])
+    s = Serializer(current_app.config["SECRET_KEY"])
     try:
         data = s.loads(token)
     except (BadSignature, SignatureExpired):
@@ -46,6 +46,7 @@ def auth_required(f):
     @wraps(f)
     def decorated(*args, **kwargs):
         token_type, token = get_token()
+        print(token, "\n", token_type)
         if request.method != 'OPTIONS':
             if token_type is None or token_type.lower() != 'bearer':
                 return api_abort(400, 'The token type must be bearer.')
@@ -55,4 +56,3 @@ def auth_required(f):
                 return invalid_token()
         return f(*args, **kwargs)
     return decorated
-
