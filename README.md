@@ -15,6 +15,17 @@ Email : `1497058369@qq.com`
 Method: GET
 URL: http://{ip_or_domain}/answer/api/v1/oauth
 ~~~
+you will get like following:
+~~~
+{
+  "answer_item_url": "http://{ip_or_domain}/answer/api/v1/oauth/answer_item/{answer_id}", 
+  "answer_items_url": "http://{ip_or_domain}/answer/api/v1/oauth/answer_items{?page}", 
+  "answer_random_item": "http://{ip_or_domain}/answer/api/v1/oauth/answer_random_item", 
+  "api_base_url": "http://{ip_or_domain}/answer/api/v1/oauth", 
+  "api_version": "1.0", 
+  "authentication_url": "http://{ip_or_domain}/answer/api/v1/oauth/token"
+}
+~~~
 
 #### Get Answer Token
 ~~~
@@ -89,4 +100,13 @@ def get_answer_items():
                        headers=headers)
     print(json.dumps(res.json(), ensure_ascii=False))
 ```
+
+
+### Get Answer Random item
+~~~
+Need: access_token
+Method: GET
+URL: http://{ip_or_domain}/answer/api/v1/oauth/answer_random_item
+~~~
+
 

@@ -5,6 +5,7 @@
 # @Software: PyCharm
 from flask import request, jsonify, g, current_app, url_for
 from flask.views import MethodView
+from sqlalchemy import func
 
 from hiblog.apis.v1.auth import generate_token, auth_required
 from hiblog.apis.v1.schemas import answer_item_schema, answer_items_schema
@@ -22,7 +23,8 @@ class AnswerIndexAPI(MethodView):
             "authentication_url": url_for(".token", _external=True),
             "answer_item_url": str(url_for(".answer_item", answer_id=1, _external=True)).rsplit('/', 1)[0].strip()
                                + "/{answer_id}",
-            "answer_items_url": url_for(".answer_items", _external=True) + "{?page}"
+            "answer_items_url": url_for(".answer_items", _external=True) + "{?page}",
+            "answer_random_item": url_for(".answer_random_item", _external=True)
         })
 
 
@@ -65,6 +67,18 @@ class AnswerItemAPI(MethodView):
         return jsonify(answer_item_schema(answer_item))
 
 
+class AnswerRandomItemAPI(MethodView):
+    decorators = [auth_required]
+
+    def get(self):
+        """Get answer by random"""
+        answer_item = Answer.query.filter_by(status=0).order_by(func.random()).first()
+        admin_user = Admin.query.order_by(Admin.id).first()  # here maybe change.
+        if g.current_user != admin_user:
+            return api_abort(403)
+        return jsonify(answer_item_schema(answer_item))
+
+
 class AnswerItemsAPI(MethodView):
     decorators = [auth_required]
 
@@ -87,3 +101,4 @@ api_v1.add_url_rule('/oauth/token', view_func=AuthTokenAPI.as_view('token'), met
 api_v1.add_url_rule('/oauth/answer_item/<int:answer_id>', view_func=AnswerItemAPI.as_view('answer_item'),
                     methods=["GET"])
 api_v1.add_url_rule('/oauth/answer_items', view_func=AnswerItemsAPI.as_view('answer_items'), methods=["GET"])
+api_v1.add_url_rule('/oauth/answer_random_item', view_func=AnswerRandomItemAPI.as_view('answer_random_item'), methods=["GET"])
