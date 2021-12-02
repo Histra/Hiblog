@@ -6,7 +6,7 @@
 from flask_ckeditor import CKEditorField
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField, SubmitField, SelectField, TextAreaField, HiddenField
-from wtforms.validators import DataRequired, Length, ValidationError, Email, Optional, URL
+from wtforms.validators import DataRequired, Length, ValidationError, Email, Optional, URL, EqualTo
 
 from hiblog.models import Category
 from hiblog.utils import is_dict
@@ -15,7 +15,8 @@ from hiblog.utils import is_dict
 class LoginForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired(), Length(1, 20)])
     password = PasswordField('Password', validators=[DataRequired(), Length(8, 128)])
-    captcha_code = StringField('Verification Code', validators=[DataRequired(), Length(4, 4, message="Input verification code.")])
+    captcha_code = StringField('Verification Code',
+                               validators=[DataRequired(), Length(4, 4, message="Input verification code.")])
     remember = BooleanField('Remember me')
     submit = SubmitField('Log in')
 
@@ -60,6 +61,7 @@ class AdminCommentForm(CommentForm):
     author = HiddenField()
     email = HiddenField()
     site = HiddenField()
+    captcha_code = None
 
 
 class SettingForm(FlaskForm):
@@ -67,6 +69,14 @@ class SettingForm(FlaskForm):
     blog_title = StringField('Blog Title', validators=[DataRequired(), Length(1, 60)])
     blog_subtitle = StringField('Blog Sub Title', validators=[DataRequired(), Length(1, 100)])
     about = CKEditorField('About Page', validators=[DataRequired()])
+    submit = SubmitField()
+
+
+class PasswordResetForm(FlaskForm):
+    reset_password = PasswordField("New Password",
+                                   validators=[DataRequired(), Length(8, 128),
+                                               EqualTo('reset_password2', message="Passwords must match.")])
+    reset_password2 = PasswordField("Confirm New Password", validators=[DataRequired()])
     submit = SubmitField()
 
 

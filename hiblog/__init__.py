@@ -167,7 +167,7 @@ def register_errors(app):
     @app.errorhandler(404)
     def errors_404(e):
         if request.accept_mimetypes.accept_json and not request.accept_mimetypes.accept_html or request.path.startswith(
-                '/api'):
+                '/answer/api'):
             response = jsonify(code=404, message="You were LOST.")
             response.status_code = 404
             return response
@@ -176,7 +176,7 @@ def register_errors(app):
     @app.errorhandler(500)
     def errors_500(e):
         if request.accept_mimetypes.accept_json and not request.accept_mimetypes.accept_html or request.path.startswith(
-                '/api'):
+                '/answer/api'):
             response = jsonify(code=500, message="An internal server error occurred.")
             response.status_code = 500
             return response

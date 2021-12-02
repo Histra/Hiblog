@@ -20,8 +20,8 @@ class AnswerIndexAPI(MethodView):
             "api_version": "1.0",
             "api_base_url": url_for(".index", _external=True),
             "authentication_url": url_for(".token", _external=True),
-            "answer_item_url": str(url_for(".answer_item", answer_id=1, _external=True)).rsplit('/', 1)[
-                                   0] + "/{answer_id}",
+            "answer_item_url": str(url_for(".answer_item", answer_id=1, _external=True)).rsplit('/', 1)[0].strip()
+                               + "/{answer_id}",
             "answer_items_url": url_for(".answer_items", _external=True) + "{?page}"
         })
 
@@ -58,7 +58,6 @@ class AnswerItemAPI(MethodView):
 
     def get(self, answer_id):
         """Get answer by answer.id"""
-        print(answer_id, "Fdafda")
         answer_item = Answer.query.get_or_404(answer_id)
         admin_user = Admin.query.order_by(Admin.id).first()  # here maybe change.
         if g.current_user != admin_user:

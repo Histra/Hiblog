@@ -8,8 +8,8 @@ from flask import Blueprint, render_template, request, current_app, flash, redir
 from flask_login import login_required, current_user
 
 from hiblog.extentions import db
-from hiblog.forms import PostForm, CategoryForm, SettingForm, MarkdownPostForm
-from hiblog.models import Post, Category, Comment
+from hiblog.forms import PostForm, CategoryForm, SettingForm, MarkdownPostForm, PasswordResetForm
+from hiblog.models import Post, Category, Comment, Admin
 from hiblog.utils import redirect_back
 
 admin_bp = Blueprint('admin', __name__)
@@ -251,17 +251,30 @@ def approve_comment(comment_id):
 @admin_bp.route('/settings', methods=['GET', 'POST'])
 @login_required
 def settings():
-    form = SettingForm()
-    if form.validate_on_submit():
-        current_user.name = form.name.data
-        current_user.blog_title = form.blog_title.data
-        current_user.blog_subtitle = form.blog_subtitle.data
-        current_user.about = form.about.data
+    setting_form = SettingForm()
+    password_reset_form = PasswordResetForm()
+    if setting_form.submit.data and setting_form.validate_on_submit():
+        current_user.name = setting_form.name.data
+        current_user.blog_title = setting_form.blog_title.data
+        current_user.blog_subtitle = setting_form.blog_subtitle.data
+        current_user.about = setting_form.about.data
         db.session.commit()
         flash('Setting updated.', 'success')
         return redirect(url_for('blog.index'))
-    form.name.data = current_user.name
-    form.blog_title.data = current_user.blog_title
-    form.blog_subtitle.data = current_user.blog_subtitle
-    form.about.data = current_user.about
-    return render_template('admin/settings.html', form=form)
+    if password_reset_form.submit.data:
+        if password_reset_form.validate_on_submit():
+            admin = Admin.query.get_or_404(current_user.id)
+            new_password = password_reset_form.reset_password.data
+            admin.set_password(new_password)
+            db.session.commit()
+            flash('Password resettled.', 'success')
+            return redirect(url_for('blog.index'))
+        else:
+            flash('Passwords must equal.', 'warning')
+            return redirect(url_for('admin.settings'))
+
+    setting_form.name.data = current_user.name
+    setting_form.blog_title.data = current_user.blog_title
+    setting_form.blog_subtitle.data = current_user.blog_subtitle
+    setting_form.about.data = current_user.about
+    return render_template('admin/settings.html', setting_form=setting_form, password_reset_form=password_reset_form)

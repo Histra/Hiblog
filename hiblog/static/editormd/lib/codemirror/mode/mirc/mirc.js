@@ -79,7 +79,7 @@ CodeMirror.defineMode("mirc", function() {
                             "var vcadd vcmd vcrem vol while whois window winhelp write writeint if isalnum " +
                             "isalpha isaop isavoice isban ischan ishop isignore isin isincs isletter islower " +
                             "isnotify isnum ison isop isprotect isreg isupper isvoice iswm iswmcs " +
-                            "elseif else goto menu nicklist status title icon size option text edit " +
+                            "elseif else goto menu nicklist status title icons size option text edit " +
                             "button check radio box scroll list combo link tab item");
   var functions = parseWords("if elseif else and not or eq ne in ni for foreach while switch");
   var isOperatorChar = /[+\-*&%=<>!?^\/\|]/;

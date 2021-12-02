@@ -137,6 +137,7 @@
 {#                    {{ render_form(form, action=request.full_path) }}#}
                     <form method="post" action="{{ request.full_path }}" class="form" role="form">
                         {{ form.csrf_token }}
+                        {% if not current_user.is_authenticated %}
                         <div class="form-group">
                             {{ form.author.label }}
                             {{ form.author(class='form-control') }}
@@ -149,10 +150,12 @@
                             {{ form.site.label }}
                             {{ form.site(class='form-control') }}
                         </div>
+                        {% endif %}
                         <div class="form-group">
                             {{ form.body.label }}
                             {{ form.body(class='form-control') }}
                         </div>
+                        {% if not current_user.is_authenticated %}
                         <div class="form-group">
                             {{ form.captcha_code.label }}
                             <div class="row form-group">
@@ -164,6 +167,7 @@
                                 </div>
                             </div>
                         </div>
+                        {% endif %}
                         {{ form.submit(class="btn btn-primary btn-md") }}
                     </form>
                 </div>

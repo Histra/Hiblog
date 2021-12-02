@@ -8,3 +8,5 @@ hiblog/apis/v1/Answer_API_v1.0_introduction.md
 
 __pycache__/
 *.log
+
+git2github.sh

@@ -16,17 +16,17 @@
                 {{ form.csrf_token }}
                 <div class="form-group">
                     {{ form.username.label }}
-                    {{ form.username(class='form-control') }}
+                    {{ form.username(class='form-control', placeholder="Username") }}
                 </div>
                 <div class="form-group">
                     {{ form.password.label }}
-                    {{ form.password(class='form-control') }}
+                    {{ form.password(class='form-control', placeholder="Password") }}
                 </div>
                 <div class="form-group">
                     {{ form.captcha_code.label }}
                     <div class="row form-group">
                         <div class="col-8 form-group">
-                            {{ form.captcha_code(class="form-control") }}
+                            {{ form.captcha_code(class="form-control", placeholder="Verification Code") }}
                         </div>
                         <div class="col-4 form-group">
                             <img id="captcha_pic" onclick="javascript:fresh_vc()" alt="Please refresh to get verification code." src="{{ url_for('auth.captcha') }}">
