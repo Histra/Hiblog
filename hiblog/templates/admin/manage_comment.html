@@ -8,6 +8,13 @@
         <h1>
             Comments
             <small class="text-muted">{{ pagination.total }}</small>
+            <form class="form-inline float-right" method="post"
+                  action="{{ url_for('.disable_all_comments', disable_all=disable_all) }}">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <button class="btn {% if disable_all %}btn-danger{% else %} btn-success {% endif %} btn-sm">
+                    {% if disable_all %}Disable{% else %} Enable {% endif %}all comments.
+                </button>
+            </form>
         </h1>
         <ul class="nav nav-pills">
             <li class="nav-item">

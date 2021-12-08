@@ -18,7 +18,7 @@ admin_bp = Blueprint('admin', __name__)
 @admin_bp.route("/post/new", methods=['POST', 'GET'])
 @login_required
 def new_post():
-    #markdown
+    # markdown
     post_type = request.args.get('post_type')
 
     if post_type == 'markdown':
@@ -225,8 +225,27 @@ def manage_comment():
         per_page=per_page
     )
     comments = pagination.items
-    return render_template("admin/manage_comment.html", pagination=pagination, comments=comments)
 
+    disable_all = Post.query.filter(Post.can_comment == 1).first()
+    if disable_all is None:
+        disable_all = False
+    else:
+        disable_all = True
+    return render_template("admin/manage_comment.html", pagination=pagination, comments=comments, disable_all=disable_all)
+
+
+@admin_bp.route("/comment/manage/disable_all_comments/<int:disable_all>", methods=["POST"])
+@login_required
+def disable_all_comments(disable_all):
+    disable_all = bool(disable_all)
+    for post in Post.query.all():
+        if disable_all:
+            post.can_comment = 0
+        else:
+            post.can_comment = 1
+    db.session.commit()
+
+    return redirect(url_for('.manage_comment'))
 
 @admin_bp.route("/comment/<int:comment_id>/delete", methods=["POST"])
 @login_required
