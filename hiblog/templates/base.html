@@ -89,36 +89,73 @@
     {% for i in range(3) %}<br>{% endfor %}
     {% block footer %}
         <footer>
-            <div class="row">
-                <div class="col-4">
-                    <p class="float-left">
-                        <small> &copy; 2021 <a href="https://github.com/Histra/Hiblog" title="Written by Histranger"
-                                               target="_blank">Histranger</a> -
-                            <a href="https://github.com/Histra" title="Fork me on GitHub" target="_blank">GitHub</a>
-                        </small>
-                        <small>版权所有</small>
-                    </p>
-                </div>
-                <div class="col-4">
-                    <p class="text-center">
-                        <small>
-                            <a href="https://beian.miit.gov.cn/" target="_blank">鲁ICP备2021044195号-1</a>
-                        </small>
-                    </p>
-                </div>
-                <div class="col-4">
-                    <p class="float-right">
-                        <small>
-                            {% if current_user.is_authenticated %}
-                                <a href="{{ url_for('auth.logout', next=request.full_path) }}">Logout</a>
-                            {% else %}
-                                <a href="{{ url_for('auth.login', next=request.full_path) }}">Login</a>
-                            {% endif %}
-                        </small>
-                    </p>
-                </div>
+        <div class="row">
+            <div class="col-6">
+                <p class="float-left">
+                    <small> &copy; 2021 <a href="https://github.com/Histra/Hiblog" title="Written by Histranger"
+                                           target="_blank">Histranger</a> -
+                        <a href="https://github.com/Histra" title="Fork me on GitHub" target="_blank">GitHub</a>
+                    </small>
+                    <small>版权所有</small>
+                </p>
             </div>
-        </footer>
+            <div class="col-6">
+                <p class="float-right">
+                    <small>
+                        {% if current_user.is_authenticated %}
+                            <a href="{{ url_for('auth.logout', next=request.full_path) }}">Logout</a>
+                        {% else %}
+                            <a href="{{ url_for('auth.login', next=request.full_path) }}">Login</a>
+                        {% endif %}
+                    </small>
+                </p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <p class="text-center">
+                    <small>
+                        <a href="https://beian.miit.gov.cn/" target="_blank">鲁ICP备2021044195号-1</a>
+                    </small>
+                </p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <p class="text-center">
+                    <small>
+                        <a target="_blank"
+                           href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=33010602012111">
+                            <img src="{{ url_for('static', filename='备案图标.png') }}" alt="备案图标.png"/>
+                            浙公网安备 33010602012111号
+                        </a>
+                    </small>
+                </p>
+            </div>
+        </div>
+        {#        <div class="row">#}
+        {#            <div class="col-12">#}
+        {#                <p class="text-center">#}
+        {#                    <small>#}
+        {#                        <a href="https://beian.miit.gov.cn/" target="_blank">鲁ICP备2021044195号-1</a>#}
+        {#                    </small>#}
+        {#                </p>#}
+        {#            </div>#}
+        {#        </div>#}
+        {#        <div class="row">#}
+        {#            <div class="col-12">#}
+        {#                <div style="width:300px;margin:0 auto; padding:20px 0;">#}
+        {#                    <a target="_blank"#}
+        {#                       href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=33010602012111">#}
+        {#                        <img src="{{ url_for('static', filename='备案图标.png') }}" style="float:left;"/>#}
+        {##}
+        {#                        <p>#}
+        {#                            浙公网安备 33010602012111号#}
+        {#                        </p>#}
+        {#                    </a>#}
+        {#                </div>#}
+        {#            </div>#}
+        {#        </div>#}
     {% endblock footer %}
 
 </main>
