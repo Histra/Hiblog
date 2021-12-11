@@ -7,11 +7,12 @@
 from flask import Blueprint, render_template, url_for, request, current_app, flash, redirect, abort, make_response, \
     session
 from flask_login import current_user
+from sqlalchemy import func
 
 from hiblog.emails import send_new_comment_email2admin
 from hiblog.extentions import db
 from hiblog.forms import AdminCommentForm, CommentForm
-from hiblog.models import Post, Category, Comment
+from hiblog.models import Post, Category, Comment, Answer
 from hiblog.utils import redirect_back
 
 blog_bp = Blueprint('blog', __name__)
@@ -102,8 +103,11 @@ def show_post(post_id):
                 flash('Verification Code Error.', 'warning')
         return redirect(url_for('.show_post', post_id=post_id) + "#comments")
 
+    answer = Answer.query.filter_by(status=0).order_by(func.random()).first()
+
     return render_template('blog/post.html', post=post, pagination=pagination, comments=comments, form=form,
-                           reply_comment_body=reply_comment.body if reply_comment else None)
+                           reply_comment_body=reply_comment.body if reply_comment else None,
+                           answer=answer)
 
 
 @blog_bp.route('/category/<int:category_id>', methods=["POST", "GET"])
@@ -136,6 +140,3 @@ def change_theme(theme_name):
 @blog_bp.route("/about")
 def about():
     return render_template("blog/about.html")
-
-
-

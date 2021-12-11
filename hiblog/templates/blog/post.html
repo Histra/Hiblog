@@ -133,7 +133,8 @@
                 </div>
             {% endif %}
             {% if post.can_comment %}
-                <div id="comment-form">
+                <h3>Welcome comments!</h3>
+                <div id="comment-form" class="card-body">
 {#                    {{ render_form(form, action=request.full_path) }}#}
                     <form method="post" action="{{ request.full_path }}" class="form" role="form">
                         {{ form.csrf_token }}
@@ -174,6 +175,9 @@
             {% else %}
                 <div class="list-group-item"><h5>Comment disabled.</h5></div>
             {% endif %}
+            <hr>
+                <p class="h6">Answer: {{ answer.content }}</p>
+            <hr>
         </div>
         <div class="col-sm-4 siderbar">
             {% include "blog/_sidebar.html" %}
