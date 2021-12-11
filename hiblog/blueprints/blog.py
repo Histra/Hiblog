@@ -140,3 +140,8 @@ def change_theme(theme_name):
 @blog_bp.route("/about")
 def about():
     return render_template("blog/about.html")
+
+
+@blog_bp.route("/thanks")
+def thanks():
+    return render_template("blog/thanks.html")
