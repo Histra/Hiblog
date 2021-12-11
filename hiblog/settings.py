@@ -35,6 +35,14 @@ class BaseConfig(object):
     HIBLOG_ANSWER_MANAGE_PER_PAGE = 10
     HIBLOG_ANSWER_API_V1_PER_PAGE = 5
 
+    MAIL_SERVER = os.getenv('MAIL_SERVER')
+    MAIL_PORT = 465
+    MAIL_USE_SSL = True
+    MAIL_USERNAME = os.getenv('MAIL_USERNAME')
+    MAIL_PASSWORD = os.getenv('MAIL_PASSWORD')
+    MAIL_DEFAULT_SENDER = ("Histranger_robot", os.getenv('MAIL_USERNAME'))
+    MAIL_DEBUG = 0  # NOTSET LOG LEVEL
+
     # TOP_PATH = os.path.abspath(os.path.dirname(__file__))
     # load_dotenv(os.path.join(TOP_PATH, '.env'))
 

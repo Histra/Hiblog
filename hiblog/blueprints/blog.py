@@ -3,12 +3,12 @@
 # @Author : Histranger
 # @File : blog.py
 # @Software: PyCharm
-import collections
 
 from flask import Blueprint, render_template, url_for, request, current_app, flash, redirect, abort, make_response, \
     session
 from flask_login import current_user
 
+from hiblog.emails import send_new_comment_email2admin
 from hiblog.extentions import db
 from hiblog.forms import AdminCommentForm, CommentForm
 from hiblog.models import Post, Category, Comment
@@ -76,8 +76,11 @@ def show_post(post_id):
             if replied_id:
                 comment.replied = reply_comment
                 # sendMessage2TheUser
+
             db.session.add(comment)
             db.session.commit()
+
+            return comment
 
         if current_user.is_authenticated:
             insert2mysql()
@@ -89,11 +92,12 @@ def show_post(post_id):
             session["comment_body"] = body
             captcha_code = session.get("captcha_code")
             if captcha_code == form.captcha_code.data.lower():
-                insert2mysql()
+                comment = insert2mysql()
                 flash('Thanks, your comment will be published after reviewed.', 'info')
                 for item in ["comment_author", "comment_email", "comment_site", "comment_body"]:
                     session.pop(item)
                 # sendMessage2Histranger
+                send_new_comment_email2admin(comment=comment)
             else:
                 flash('Verification Code Error.', 'warning')
         return redirect(url_for('.show_post', post_id=post_id) + "#comments")

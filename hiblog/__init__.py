@@ -16,7 +16,7 @@ from hiblog.blueprints.answer import answer_bp
 from hiblog.blueprints.admin import admin_bp
 from hiblog.blueprints.auth import auth_bp
 from hiblog.blueprints.blog import blog_bp
-from hiblog.extentions import db, moment, bootstrap, login_manager, csrf, ckeditor
+from hiblog.extentions import db, moment, bootstrap, login_manager, csrf, ckeditor, mail
 from hiblog.models import ForTest, Admin, Category, Post, Comment
 from hiblog.settings import config
 
@@ -60,6 +60,7 @@ def register_extensions(app):
     csrf.init_app(app)
     csrf.exempt(api_v1)
     ckeditor.init_app(app)
+    mail.init_app(app)
     from flaskext.markdown import Markdown
     markdown = Markdown(app)
 

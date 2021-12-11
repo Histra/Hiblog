@@ -19,6 +19,7 @@ flask-markdown = "*"
 markdown = "*"
 flask-cors = "*"
 pillow = "*"
+flask-mail = "*"
 
 [dev-packages]
 flask-sqlacodegen = "*"

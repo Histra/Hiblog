@@ -7,6 +7,7 @@ import markdown
 from flask import Blueprint, render_template, request, current_app, flash, redirect, url_for
 from flask_login import login_required, current_user
 
+from hiblog.emails import send_admin_approve2visitor, send_reply_comment2someone
 from hiblog.extentions import db
 from hiblog.forms import PostForm, CategoryForm, SettingForm, MarkdownPostForm, PasswordResetForm
 from hiblog.models import Post, Category, Comment, Admin
@@ -263,6 +264,11 @@ def approve_comment(comment_id):
     comment = Comment.query.get_or_404(comment_id)
     comment.reviewed = True
     db.session.commit()
+    send_admin_approve2visitor(comment)
+    reply_comment = comment.replied
+    if reply_comment and not reply_comment.from_admin:
+        send_reply_comment2someone(reply_comment, comment)
+
     flash('Comment published.', 'success')
     return redirect_back()
 
