@@ -39,13 +39,14 @@ class BaseConfig(object):
     # load_dotenv(os.path.join(TOP_PATH, '.env'))
 
 
+# https://stackoverflow.com/questions/31294361/using-sqlalchemy-and-pymysql-how-can-i-set-the-connection-to-utilize-utf8mb4
 class DevelopmentConfig(BaseConfig):
-    SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://{}:{}@{}/{}'. \
+    SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://{}:{}@{}/{}?charset=utf8mb4'. \
         format(MYSQL_USERNAME, MYSQL_PASSWORD, MYSQL_HOST, MYSQL_DATABASE_NAME)
 
 
 class ProductionConfig(BaseConfig):
-    SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://{}:{}@{}/{}'. \
+    SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://{}:{}@{}/{}?charset=utf8mb4'. \
         format(MYSQL_USERNAME, MYSQL_PASSWORD, MYSQL_HOST, MYSQL_DATABASE_NAME)
 
 
