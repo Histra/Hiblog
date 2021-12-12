@@ -5,7 +5,8 @@
 # @Software: PyCharm
 from flask_ckeditor import CKEditorField
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField, SelectField, TextAreaField, HiddenField
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, SelectField, TextAreaField, HiddenField, \
+    DateField
 from wtforms.validators import DataRequired, Length, ValidationError, Email, Optional, URL, EqualTo
 
 from hiblog.models import Category
@@ -23,6 +24,7 @@ class LoginForm(FlaskForm):
 
 class PostForm(FlaskForm):
     title = StringField('Title', validators=[DataRequired(), Length(1, 60)])
+    date = DateField('Date', validators=[Optional()])
     category = SelectField('Category', validators=[DataRequired()], coerce=int, default=1)
     body = CKEditorField('Body', validators=[DataRequired()])
     submit = SubmitField()

@@ -60,7 +60,7 @@ class Post(db.Model):
     title = db.Column(db.String(80))
     body = db.Column(db.Text)
     type = db.Column(db.String(20), default='text')
-    timestamp = db.Column(db.DateTime, default=datetime.utcnow)
+    timestamp = db.Column(db.DateTime, default=datetime.now)  # utcnow is utc time, now is local now
     can_comment = db.Column(db.Boolean, default=True)
 
     category_id = db.Column(db.Integer, db.ForeignKey('category.id'))
@@ -79,7 +79,7 @@ class Comment(db.Model):
     body = db.Column(db.Text)
     from_admin = db.Column(db.Boolean, default=False)
     reviewed = db.Column(db.Boolean, default=False)
-    timestamp = db.Column(db.DateTime, default=datetime.utcnow, index=True)  # create Index for faster search
+    timestamp = db.Column(db.DateTime, default=datetime.now, index=True)  # create Index for faster search
 
     post_id = db.Column(db.Integer, db.ForeignKey('post.id'))
     post = db.relationship('Post', back_populates='comments')
