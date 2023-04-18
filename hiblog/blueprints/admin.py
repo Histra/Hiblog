@@ -88,6 +88,8 @@ def edit_post(post_id):
             post.title = form.title.data
             post.body = form.body.data
             post.category = Category.query.get(form.category.data)
+            post.timestamp = form.date.data
+            post.is_secret = form.is_secret.data
             db.session.commit()
             flash('Post updated.', 'success')
             return redirect(url_for('blog.show_post', post_id=post.id))
@@ -95,7 +97,9 @@ def edit_post(post_id):
         form.title.data = post.title
         form.body.data = post.body
         form.category.data = post.category_id
-
+        form.date.data = post.timestamp
+        form.is_secret.data = post.is_secret
+        
         return render_template('admin/edit_post.html', form=form)
 
 
