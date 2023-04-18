@@ -4,14 +4,18 @@
             <a href="{{ url_for('.show_post', post_id=post.id) }}">{{ post.title }}</a>
         </h3>
         <p>
-            {% if post.type == 'markdown' %}
-                {{ post.body|markdown|striptags|truncate }}
+            {% if current_user.is_authenticated or not post.is_secret %}
+                {% if post.type == 'markdown' %}
+                    {{ post.body|markdown|striptags|truncate }}
+                {% else %}
+                    {{ post.body|striptags|truncate }}
+                {% endif %}
+                <small>
+                    <a href="{{ url_for('.show_post', post_id=post.id) }}">Read More...</a>
+                </small>
             {% else %}
-                {{ post.body|striptags|truncate }}
+                This blog post is private. 
             {% endif %}
-            <small>
-                <a href="{{ url_for('.show_post', post_id=post.id) }}">Read More...</a>
-            </small>
         </p>
 
         <small>

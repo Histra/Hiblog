@@ -46,12 +46,14 @@ def new_post():
             body = form.body.data
             category = Category.query.get(form.category.data)
             timestamp = form.date.data
-            print(timestamp)
+            is_secret = form.is_secret.data
+            # print(timestamp)
             post = Post(
                 title=title,
                 body=body,
                 category=category,
-                timestamp=timestamp
+                timestamp=timestamp,
+                is_secret=is_secret,
             )
             db.session.add(post)
             db.session.commit()

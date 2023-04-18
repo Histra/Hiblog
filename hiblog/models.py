@@ -68,6 +68,8 @@ class Post(db.Model):
 
     comments = db.relationship('Comment', back_populates='post', cascade='all,delete-orphan')
 
+    is_secret = db.Column(db.Boolean, default=False)
+
 
 class Comment(db.Model):
     __tablename__ = 'comment'

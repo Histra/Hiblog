@@ -3,10 +3,11 @@
 # @Author : Histranger
 # @File : forms.py
 # @Software: PyCharm
+from email.policy import default
 from flask_ckeditor import CKEditorField
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField, SubmitField, SelectField, TextAreaField, HiddenField, \
-    DateField
+    DateField, RadioField
 from wtforms.validators import DataRequired, Length, ValidationError, Email, Optional, URL, EqualTo
 
 from hiblog.models import Category
@@ -27,6 +28,7 @@ class PostForm(FlaskForm):
     date = DateField('Date', validators=[Optional()])
     category = SelectField('Category', validators=[DataRequired()], coerce=int, default=1)
     body = CKEditorField('Body', validators=[DataRequired()])
+    is_secret = RadioField('Make Post Secret?', choices=[(False, 'False'), (True, 'True')], default=False, coerce=bool)
     submit = SubmitField()
 
     def __init__(self, *args, **kwargs):
