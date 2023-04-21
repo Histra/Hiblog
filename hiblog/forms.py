@@ -28,7 +28,7 @@ class PostForm(FlaskForm):
     date = DateField('Date', validators=[Optional()])
     category = SelectField('Category', validators=[DataRequired()], coerce=int, default=1)
     body = CKEditorField('Body', validators=[DataRequired()])
-    is_secret = RadioField('Make Post Secret?', choices=[(False, 'False'), (True, 'True')], default=False, coerce=bool)
+    is_secret = BooleanField('Make Post Secret')
     submit = SubmitField()
 
     def __init__(self, *args, **kwargs):

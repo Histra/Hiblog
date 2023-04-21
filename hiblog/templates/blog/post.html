@@ -15,7 +15,11 @@
 
 {% block content %}
     <div class="page-header">
-        <h1>{{ post.title }}</h1>
+        <h1>{{ post.title }} 
+            {% if post.is_secret %}
+                <i class="bi bi-file-earmark-lock"></i>
+            {% endif %}
+        </h1>
         <hr>
         <small>
             Category: <a

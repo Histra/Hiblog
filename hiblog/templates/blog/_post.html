@@ -1,7 +1,11 @@
 {% if posts %}
     {% for post in posts %}
         <h3 class="text-primary">
-            <a href="{{ url_for('.show_post', post_id=post.id) }}">{{ post.title }}</a>
+            <a href="{{ url_for('.show_post', post_id=post.id) }}">{{ post.title }} 
+                {% if post.is_secret %}
+                    <i class="bi bi-file-earmark-lock"></i>
+                {% endif %}
+            </a>
         </h3>
         <p>
             {% if current_user.is_authenticated or not post.is_secret %}

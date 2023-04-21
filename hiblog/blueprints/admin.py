@@ -90,6 +90,7 @@ def edit_post(post_id):
             post.category = Category.query.get(form.category.data)
             post.timestamp = form.date.data
             post.is_secret = form.is_secret.data
+            print(post.is_secret, form.is_secret.data)
             db.session.commit()
             flash('Post updated.', 'success')
             return redirect(url_for('blog.show_post', post_id=post.id))
